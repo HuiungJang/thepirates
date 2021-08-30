@@ -35,21 +35,21 @@ public interface ProductMapper {
 
     // 목록 출력
     @Select("select p.name,p.description, min(o.price) as price" +
-            "from PRODUCT p join OPTIONS O on p.product_no = O.PRODUCT_NO" +
-            "group by o.price,p.date" +
-            "order by p.DATE desc")
+            " from PRODUCT p join OPTIONS O on p.product_no = O.PRODUCT_NO" +
+            " group by o.price,p.date" +
+            " order by p.DATE desc")
     List<Map<String,Object>> printList();
 
     // 상품 상세 조회
     @Select("select p.name,p.description,d.type" +
-            "from PRODUCT p" +
+            " from PRODUCT p" +
             "    join Delivery d on p.product_no = d.product_no" +
-            "where p.product_no = #{productId}")
+            " where p.product_no = #{productId}")
     Map<String,Object> printProduct(int productId);
 
     @Select("select name,price" +
-            "from Options" +
-            "where product_no=#{productNo}")
+            " from Options" +
+            " where product_no=#{productNo}")
     List<Map<String,Object>> printProductOptions(int productId);
 
     // 수령일 선택목록

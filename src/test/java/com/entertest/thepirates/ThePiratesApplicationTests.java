@@ -1,24 +1,31 @@
 package com.entertest.thepirates;
 
 import com.entertest.thepirates.product.CheckDate;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.entertest.thepirates.product.EnableMockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AutoConfigureMockMvc
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+@EnableMockMvc
 @SpringBootTest
 @Slf4j
 class ThePiratesApplicationTests {
@@ -84,7 +91,19 @@ class ThePiratesApplicationTests {
     //수령일 선택
     @Test
     void receivingDate() throws Exception {
-        String url="/product/receiving/date/11";
+        String url="/product/receiving/date?productId=11";
+
+        mockMvc.perform(MockMvcRequestBuilders.get(url)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> {
+                    log.info(result+"?");
+                    MockHttpServletResponse response = result.getResponse();
+                    log.info(response.getContentAsString());
+                });
+    }
+    @Test
+    void printListDetail() throws Exception {
+        String url = "/product/list/detail?productId=11";
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -98,19 +117,21 @@ class ThePiratesApplicationTests {
     void checkHolidays() throws Exception{
         CheckDate c = new CheckDate();
 //        System.out.println(c.date()+"내일");
-
+        int holy = 0;
         for(int i=0; i<5; i++) {
-            String[] dayArr = c.date(5+i).split("-");
+            String[] dayArr = c.date(i+holy).split("-");
+
             int month = Integer.parseInt(dayArr[1]);
             int date =  Integer.parseInt(dayArr[2]);
-            System.out.println(
-                    month+"월 "+
-                    date+"일 "
-                    +
-                    c.day(Integer.parseInt(dayArr[0]),
-                    month,
-                    date)
-            );
+            String dayOfWeek = c.day(Integer.parseInt(dayArr[0]),month, date);
+
+            if(dayOfWeek.equals("토요일")) {
+                holy++;
+            }else if(dayOfWeek.equals("일요일")){
+                holy++;
+            }
+
+            System.out.println(month+"월 "+ date+"일 "+ dayOfWeek);
         }
 
     }
