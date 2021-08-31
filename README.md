@@ -168,23 +168,18 @@ ALTER TABLE Options ADD CONSTRAINT FK_Product_TO_Option_1 FOREIGN KEY (
 ---
 ## 상품추가 API
 - 요청주소 : '/product'
-- 추가하려는 상품은 POST로 JSON 변환해서 전송할 것
+- 추가하려는 상품은 POST로 전송할 것
 
 #### 요청 파라미터
 - name : 상품명
 - description : 상품설명
 - delivery: 배송 정보
-<br>
-&nbsp; - type : 배송방식 -> fast : 당일 배송, regular : 익일 배송
-<br>
-&nbsp; - closing : 배송 마감 시간
+  1. type : 배송방식 -> fast : 당일 배송, regular : 익일 배송
+  2. closing : 배송 마감 시간 (String 형태)
 - options : 옵션정보
-<br>
-&nbsp; - name : 선택 옵션
-<br>
-&nbsp; - price : 선택한 옵션 가격
-<br>
-&nbsp; - stock : 선택한 옵션 재고
+  1. name : 선택 옵션
+  2. price : 선택한 옵션 가격 (int 형태)
+  3. stock : 선택한 옵션 재고 (int 형태)
 
 
 #### 요청 예시 
