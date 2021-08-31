@@ -46,7 +46,7 @@ public class ProductController {
     // 상품 상세 조회
     // 상품 아이디를 받아 조회함
     @GetMapping("/product/list/detail")
-    public Map<String,Object> printListDetail(@RequestParam(value = "productId") int productId){
+    public Map<String,Object> printListDetail(@RequestParam(value = "productid") int productId){
         System.out.println(productId);
 
         Map<String,Object> productInfo = service.printProduct(productId);
@@ -59,7 +59,7 @@ public class ProductController {
 
     // 수령일 선택목록
     @GetMapping("/product/receiving/date")
-    public List<Map<String,String>> receivingDate(@RequestParam(value = "productId")int productId) throws ParseException {
+    public List<Map<String,String>> receivingDate(@RequestParam(value = "productid")int productId) throws ParseException {
         int dateCount=0;
         CheckDate checkDate = new CheckDate();
 
@@ -79,7 +79,7 @@ public class ProductController {
         if(expiredTimeHr == checkDateTimeHr) {
             if(Integer.parseInt(checkDate.checkExpiredTime().substring(3))>0){
                 dateCount++;
-            };
+            }
         }
 
         // 당일 배송 아니면
@@ -103,7 +103,6 @@ public class ProductController {
             }
             answer.put("date",month+"월 "+ date+"일 "+ dayOfWeek);
             result.add(i,answer);
-            System.out.println(month+"월 "+ date+"일 "+ dayOfWeek);
         }
 
         return result;
